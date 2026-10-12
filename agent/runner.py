@@ -117,7 +117,7 @@ def _guarded_call(session: _Session, *, run: str, tool: str, args: dict, classif
         parent_scopes=parent_scopes,
         expires_at=session.expires_at,
     )
-    allow, reason = check(context)
+    allow, reason = _policy_check(context)
     ledger.append({
         "ts": datetime.now(timezone.utc).isoformat(),
         "agent_id": agent_id,
@@ -212,3 +212,15 @@ def handle(message: str, llm, log_dir: Path | None = None,
     # Run B chỉ phục vụ việc hợp lệ trong phiên; hồ sơ không đi ra ngoài.
     _run_b(session, ticket_ids)
     return llm.summarize(docs)
+
+
+def _policy_check(context: PolicyContext) -> tuple[bool, str]:
+    """PDP mặc định là agent/policy.py; LAB24_POLICY_ENGINE=opa dùng bản Rego (bonus)."""
+    import os
+
+    if os.environ.get("LAB24_POLICY_ENGINE", "python").lower() == "opa":
+        from agent import policy_opa
+
+        allow, reason = policy_opa.check(context)
+        return allow, f"[opa] {reason}"
+    return check(context)

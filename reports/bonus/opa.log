@@ -1,0 +1,28 @@
+# Bonus OPA — 2026-10-12T15:26:18Z
+Version: 1.20.2
+
+$ opa check --strict policy/
+OK
+
+$ opa test policy/ -v
+data.lab24.policy_test.test_restricted_egress_denied_even_for_dpo: PASS (2.6723ms)
+data.lab24.policy_test.test_malformed_expiry_denied: PASS (2.6723ms)
+data.lab24.policy_test.test_unknown_principal_denied: PASS (3.8859ms)
+data.lab24.policy_test.test_wrong_purpose_denied: PASS (4.4304ms)
+data.lab24.policy_test.test_dpo_can_read_customer: PASS (4.9478ms)
+data.lab24.policy_test.test_expired_run_denied: PASS (3.8732ms)
+data.lab24.policy_test.test_support_l1_cannot_read_customer: PASS (3.3394ms)
+data.lab24.policy_test.test_public_egress_allowed: PASS (4.4033ms)
+data.lab24.policy_test.test_delegation_cannot_expand_parent_scope: PASS (5.5128ms)
+data.lab24.policy_test.test_every_decision_has_reason: PASS (6.0381ms)
+--------------------------------------------------------------------------------
+PASS: 10/10
+
+$ python -m pytest tests/test_bonus_opa.py -v -s
+tests/test_bonus_opa.py::test_rego_unit_tests_pass PASSED
+tests/test_bonus_opa.py::test_opa_matches_python_on_every_context 
+[opa] 7680 context, 0 lệch so với agent/policy.py, 260 allow
+tests/test_bonus_opa.py::test_opa_fails_closed_without_binary PASSED
+tests/test_bonus_opa.py::test_agent_runs_end_to_end_on_opa[support_l1] PASSED
+tests/test_bonus_opa.py::test_agent_runs_end_to_end_on_opa[dpo] PASSED
+============================== 5 passed in 3.27s ==============================

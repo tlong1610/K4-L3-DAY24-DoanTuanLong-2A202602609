@@ -1,0 +1,10 @@
+# Bonus delete cascade — 2026-10-12T15:26:23Z
+$ python -m pytest tests/test_bonus_erasure.py -v -s
+tests/test_bonus_erasure.py::test_support_l1_cannot_erase PASSED
+tests/test_bonus_erasure.py::test_erasure_cascades_and_ledger_still_verifies 
+[erasure] {'erased': True, 'tickets_scrubbed': ['ticket-901.md', 'ticket-902.md', 'ticket-903.md', 'ticket-904.md'], 'ledger_verified_before': True, 'ledger_verified_after': True}
+[erasure] ledger 23 dòng trước xoá -> 46 dòng sau, verify=True; run lại đọc 20 khách, không có KH-000999
+tests/test_bonus_erasure.py::test_deleting_ledger_lines_instead_would_break_the_chain PASSED
+tests/test_bonus_erasure.py::test_known_limit_tail_truncation_is_not_detected PASSED
+tests/test_bonus_erasure.py::test_repo_data_is_untouched PASSED
+============================== 5 passed in 1.45s ==============================

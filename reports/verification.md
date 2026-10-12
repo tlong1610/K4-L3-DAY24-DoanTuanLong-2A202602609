@@ -4,7 +4,7 @@ Chạy ngày 2026-10-12, trên máy cá nhân.
 
 - **OS / Python / Gitleaks version:** Windows 11 Pro (10.0.26300), **Windows native** qua Git Bash/PowerShell vì máy không có WSL Ubuntu; Python 3.12.6 trong `.venv`; Gitleaks **8.30.1** (binary `windows_x64` từ release chính thức, SHA256 khớp file checksums); pre-commit 4.6.2.
 
-- **`python -m pytest tests/ -q`:** `33 passed`. Gồm `test_pii` 2, `test_policy` 4, `test_obo` 5, `test_split` 1, `test_ledger` 3, `test_injection` 8 (4 biến thể × `support_l1`/`dpo`), `test_supply_chain` 3, `test_check_lure_cli` 3, `test_scaffold_dispatch` 4. PII: `gold=118 pred=118 tp=118`, precision = recall = 1.000.
+- **`python -m pytest tests/ -q`:** `46 passed` = 33 bắt buộc + 13 bonus (`test_bonus_opa` 5, `test_bonus_mcp_rugpull` 3, `test_bonus_erasure` 5; test OPA tự skip nếu không có `opa`). Phần bắt buộc gồm `test_pii` 2, `test_policy` 4, `test_obo` 5, `test_split` 1, `test_ledger` 3, `test_injection` 8 (4 biến thể × `support_l1`/`dpo`), `test_supply_chain` 3, `test_check_lure_cli` 3, `test_scaffold_dispatch` 4. PII: `gold=118 pred=118 tp=118`, precision = recall = 1.000.
 
 - **`pre-commit run --all-files`:** `Detect hardcoded secrets ... Passed` (hook `gitleaks-system`, `rev: v8.30.1`). Hook dùng `--staged` nên khi không có gì được stage thì quét 0 byte. Đã thử stage một file chứa token giả `LAB24-DEMO`: hook **Failed** với `RuleID: lab24-synthetic-token`; file thử đã gỡ khỏi stage và xoá, không commit.
 
@@ -24,4 +24,5 @@ Chạy ngày 2026-10-12, trên máy cá nhân.
   - README ghi Windows native chưa được pilot. Trên Windows, các script in tiếng Việt (ví dụ `python sink/sink.py --reset`) bị `UnicodeEncodeError` với code page cp1252 nếu không đặt `PYTHONIOENCODING=utf-8`. Tái hiện: chạy `python sink/sink.py --reset` trong PowerShell mặc định. Lệnh reset vẫn xoá log trước khi lỗi ở dòng `print`. Mọi lệnh trong bài đều chạy với `PYTHONIOENCODING=utf-8`.
   - `requirements.lock` sinh trên Windows nên có `colorama==0.4.6` (phụ thuộc của pytest chỉ trên Windows), không kèm platform marker. Trên Linux/macOS gói này vẫn được cài (vô hại); muốn lock đúng cho từng nền tảng thì phải sinh lại trên nền tảng đó.
   - Compliance mapping **chưa xác minh** số điều/khoản của Luật 91/2025, NĐ 356/2025, Luật 134/2025 với văn bản gốc.
-  - Không làm bonus.
+  - Bonus: OPA/Rego, MCP rug pull, delete cascade — xem `reports/bonus.md` và `reports/bonus/*.log`. OPA v1.20.2 (`opa_windows_amd64.exe`, SHA256 khớp release). Không làm mục GLiNER.
+  - Bonus thêm `erase_customer` và purpose `erasure-request` cho `dpo` trong `data/principals.json`. `reports/ledger.jsonl` của checkpoint 5 sinh trước thay đổi này; reason trong đó không phụ thuộc hai giá trị mới.

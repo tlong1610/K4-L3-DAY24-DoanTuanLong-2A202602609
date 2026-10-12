@@ -17,7 +17,7 @@ Hệ thống: agent hỗ trợ khách hàng Day 24 (`agent/`), chạy `--mock` t
 |---|---|---|---|
 | `support_l1` | `search_docs` | `summarize-tickets`, `support-reply` | **Không** (deny ở PEP, trước khi đọc) |
 | `billing` | `search_docs`, `read_customer` | `summarize-tickets`, `billing-reconciliation` | Có, chỉ với purpose đối soát |
-| `dpo` | `search_docs`, `read_customer` | `summarize-tickets`, `support-reply`, `privacy-audit` | Có, chỉ khách gắn với ticket qua `related_tickets` |
+| `dpo` | `search_docs`, `read_customer`, `erase_customer` (bonus) | `summarize-tickets`, `support-reply`, `privacy-audit`, `erasure-request` (bonus) | Có, chỉ khách gắn với ticket qua `related_tickets`; được xoá dữ liệu khách theo yêu cầu (`reports/bonus.md` §3) |
 
 Runner gán purpose `summarize-tickets` cho Run A và `support-reply` cho Run B. Không principal nào có `http_post`.
 
