@@ -1,0 +1,11 @@
+# Checkpoint 4: chặn secret trước khi vào commit.
+# gitleaks-system dùng binary gitleaks đã cài sẵn trong PATH (v8.30.1),
+# không build Go trong giờ lab. `gitleaks git` chỉ nhận một repo path nên
+# không để pre-commit truyền danh sách file vào.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks-system
+        args: ["--config", ".gitleaks.toml"]
+        pass_filenames: false
